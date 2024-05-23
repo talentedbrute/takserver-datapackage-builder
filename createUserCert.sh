@@ -47,5 +47,6 @@ then
 	exit 1
 fi
 
-${SCRIPT_DIR}/buildDP.sh -U ${USER} -z ${CERTNAME} -c /opt/tak/certs/files/${CERTNAME}.p12 ${ITAK} ${FULL}
+cd ${SCRIPT_DIR}
+./buildDP.sh -U ${USER} -z ${CERTNAME} -c /opt/tak/certs/files/${CERTNAME}.p12 ${ITAK} ${FULL}
 
