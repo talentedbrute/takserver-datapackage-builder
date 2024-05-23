@@ -1,6 +1,10 @@
 # takserver-datapackage-builder
 Scripts to help build data packages for TAK Server.
 
+# pre-requisite
+The scripts need to use the `uuid` command line tool. You will need to install that using your systems package manager.
+
+
 # Directions:
 1. Place your servers' CA.p12 into each of the template folders
 2. Update the secure.pref in each tempalte to use your host and to your server's CA.p12
