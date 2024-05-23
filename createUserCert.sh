@@ -1,5 +1,5 @@
 #!/bin/bash
-
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 USER=
 CERTNAME=
 ITAK=
@@ -47,5 +47,5 @@ then
 	exit 1
 fi
 
-./buildDP.sh -U ${USER} -z ${CERTNAME} -c /opt/tak/certs/files/${CERTNAME}.p12 ${ITAK} ${FULL}
+${SCRIPT_DIR}/buildDP.sh -U ${USER} -z ${CERTNAME} -c /opt/tak/certs/files/${CERTNAME}.p12 ${ITAK} ${FULL}
 
