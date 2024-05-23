@@ -1,11 +1,11 @@
 #!/bin/bash
 
 USER=
-CERTNAME=
+ZIPNAME=
 CERT=
 ITAK=0
 FULL=0
-usage() { echo "usage: buildDP.sh -U <username> -u <name for data package> -c <certificate file> -i"; exit 1; }
+usage() { echo "usage: buildDP.sh -U <username> -z <name for data package> -c <certificate file> -i"; exit 1; }
 
 while getopts "fiu:U:c:h" arg; do
 	case $arg in
@@ -15,8 +15,8 @@ while getopts "fiu:U:c:h" arg; do
 		U)
 			USER=$OPTARG
 			;;
-		u)
-			CERTNAME=$OPTARG
+		z)
+			ZIPNAME=$OPTARG
 			;;
 		c)	
 			CERT=$OPTARG
@@ -31,7 +31,7 @@ while getopts "fiu:U:c:h" arg; do
 done
 shift $((OPTIND-1))
 
-if [ -z "${CERTNAME}" ] || [ -z "${CERT}" ] || [ -z "${USER}" ];
+if [ -z "${ZIPNAME}" ] || [ -z "${CERT}" ] || [ -z "${USER}" ];
 then
 	usage
 fi
@@ -41,35 +41,33 @@ CERTFILE=`basename ${CERT}`
 if [ "${FULL}" == "0" ]
 then
 
-	cp -a template ${CERTNAME}
+	cp -a template ${ZIPNAME}
 
-	sed -i 's/##username##/'"${USER}"'/g' ${CERTNAME}/secure.pref
-	sed -i 's/##uuid##/'"`uuid`"'/g' ${CERTNAME}/MANIFEST/manifest.xml
+	sed -i 's/##username##/'"${USER}"'/g' ${ZIPNAME}/secure.pref
+	sed -i 's/##uuid##/'"`uuid`"'/g' ${ZIPNAME}/MANIFEST/manifest.xml
 else
-	cp -a template-full ${CERTNAME}
+	cp -a template-full ${ZIPNAME}
 
-	cp files/${CERTFILE} ${CERTNAME}
+	cp files/${CERTFILE} ${ZIPNAME}
 
-	sed -i 's/##usercert##/'"${CERTFILE}"'/g' ${CERTNAME}/secure.pref
-	sed -i 's/##username##/'"${USER}"'/g' ${CERTNAME}/secure.pref
-	sed -i 's/##username##/'"${CERTNAME}"'/g' ${CERTNAME}/MANIFEST/manifest.xml
-	sed -i 's/##usercert##/'"${CERTFILE}"'/g' ${CERTNAME}/MANIFEST/manifest.xml
-	sed -i 's/##uuid##/'"`uuid`"'/g' ${CERTNAME}/MANIFEST/manifest.xml
+	sed -i 's/##usercert##/'"${CERTFILE}"'/g' ${ZIPNAME}/secure.pref
+	sed -i 's/##username##/'"${USER}"'/g' ${ZIPNAME}/secure.pref
+	sed -i 's/##username##/'"${USER}"'/g' ${ZIPNAME}/MANIFEST/manifest.xml
+	sed -i 's/##usercert##/'"${CERTFILE}"'/g' ${ZIPNAME}/MANIFEST/manifest.xml
+	sed -i 's/##uuid##/'"`uuid`"'/g' ${ZIPNAME}/MANIFEST/manifest.xml
 fi
 
 SUFFIX=
 if [ "${ITAK}" == 0 ];
 then
-	zip -r ${CERTNAME}.zip ${CERTNAME}
+	zip -r ${ZIPNAME}.zip ${ZIPNAME}
 else
 	SUFFIX=_iTAK
-	cd ${CERTNAME}
+	cd ${ZIPNAME}
 	mv secure.pref config.pref
-	zip ../${CERTNAME}${SUFFIX}.zip config.pref *.p12
+	zip ../${ZIPNAME}${SUFFIX}.zip config.pref *.p12
 	cd ..
 fi
 
-rm -rf ${CERTNAME}
+rm -rf ${ZIPNAME}
 
-echo "Copying ${CERTNAME}${SUFFIX}.zip to s3://ts-certs..."
-/usr/local/bin/aws s3 cp ${CERTNAME}${SUFFIX}.zip s3://ts-certs

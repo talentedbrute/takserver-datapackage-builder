@@ -41,8 +41,6 @@ cd /opt/tak/certs
 
 java -jar /opt/tak/utils/UserManager.jar usermod -c /opt/tak/certs/files/${CERTNAME}.pem ${USER}
 
-
-
 if [ ! -f /opt/tak/certs/files/${CERTNAME}.p12 ]; 
 then
 	echo "Cert file (${CERTFILE}.p12) does not exists!"
