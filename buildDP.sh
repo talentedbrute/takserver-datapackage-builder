@@ -5,9 +5,9 @@ ZIPNAME=
 CERT=
 ITAK=0
 FULL=0
-usage() { echo "usage: buildDP.sh -U <username> -z <name for data package> -c <certificate file> -i"; exit 1; }
+usage() { echo "usage: buildDP.sh -U <username> -z <name for data package zip> -c <certificate file> -i"; exit 1; }
 
-while getopts "fiu:U:c:h" arg; do
+while getopts "fiz:U:c:h" arg; do
 	case $arg in
 		h)
 			usage
