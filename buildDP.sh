@@ -48,7 +48,7 @@ then
 else
 	cp -a template-full ${ZIPNAME}
 
-	cp files/${CERTFILE} ${ZIPNAME}
+	cp /opt/tak/certs/files/${CERTFILE} ${ZIPNAME}
 
 	sed -i 's/##usercert##/'"${CERTFILE}"'/g' ${ZIPNAME}/secure.pref
 	sed -i 's/##username##/'"${USER}"'/g' ${ZIPNAME}/secure.pref
