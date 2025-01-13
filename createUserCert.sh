@@ -35,8 +35,6 @@ fi
 
 cd /opt/tak/certs
 
-. cert-env.sh
-
 ./makeCert.sh client ${CERTNAME}
 
 java -jar /opt/tak/utils/UserManager.jar usermod -c /opt/tak/certs/files/${CERTNAME}.pem ${USER}
