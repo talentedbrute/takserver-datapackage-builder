@@ -1,11 +1,23 @@
 #!/bin/bash
 
-USER=
-ZIPNAME=
-CERT=
+USER=""
+ZIPNAME=""
+CERT=""
 ITAK=0
 FULL=0
-usage() { echo "usage: buildDP.sh -U <username> -z <name for data package zip> -c <certificate file> -i -f" ; exit 1; }
+
+usage() {
+    echo "Usage: buildDP.sh [options]"
+    echo ""
+    echo "Options:"
+    echo "  -h          Show this help message and exit."
+    echo "  -U <user>   Specify the username."
+    echo "  -z <name>   Name for the data package zip file."
+    echo "  -c <cert>   Path to the certificate file."
+    echo "  -i          Include iTAK configuration (optional)."
+    echo "  -f          Create a full data package (optional)."
+    exit 1
+}
 
 while getopts "fiz:U:c:h" arg; do
 	case $arg in
@@ -31,43 +43,35 @@ while getopts "fiz:U:c:h" arg; do
 done
 shift $((OPTIND-1))
 
-if [ -z "${ZIPNAME}" ] || [ -z "${CERT}" ] || [ -z "${USER}" ];
-then
+if [[ -z "${ZIPNAME}" || -z "${CERT}" || -z "${USER}" ]]; then
 	usage
 fi
 
-CERTFILE=`basename ${CERT}`
+CERTFILE=$(basename "${CERT}")
 
-if [ "${FULL}" == "0" ]
-then
-
-	cp -a template ${ZIPNAME}
-
-	sed -i 's/##username##/'"${USER}"'/g' ${ZIPNAME}/secure.pref
-	sed -i 's/##uuid##/'"`uuid`"'/g' ${ZIPNAME}/MANIFEST/manifest.xml
+if [[ ${FULL} == 0 ]]; then
+	cp -a template "${ZIPNAME}"
+	sed -i 's/##username##/'"${USER}"'/g' "${ZIPNAME}/secure.pref"
+	sed -i 's/##uuid##/'"$(uuid)"'/g' "${ZIPNAME}/MANIFEST/manifest.xml"
 else
-	cp -a template-full ${ZIPNAME}
-
-	cp /opt/tak/certs/files/${CERTFILE} ${ZIPNAME}
-
-	sed -i 's/##usercert##/'"${CERTFILE}"'/g' ${ZIPNAME}/secure.pref
-	sed -i 's/##username##/'"${USER}"'/g' ${ZIPNAME}/secure.pref
-	sed -i 's/##username##/'"${USER}"'/g' ${ZIPNAME}/MANIFEST/manifest.xml
-	sed -i 's/##usercert##/'"${CERTFILE}"'/g' ${ZIPNAME}/MANIFEST/manifest.xml
-	sed -i 's/##uuid##/'"`uuid`"'/g' ${ZIPNAME}/MANIFEST/manifest.xml
+	cp -a template-full "${ZIPNAME}"
+	cp "/opt/tak/certs/files/${CERTFILE}" "${ZIPNAME}"
+	sed -i 's/##usercert##/'"${CERTFILE}"'/g' "${ZIPNAME}/secure.pref"
+	sed -i 's/##username##/'"${USER}"'/g' "${ZIPNAME}/secure.pref"
+	sed -i 's/##username##/'"${USER}"'/g' "${ZIPNAME}/MANIFEST/manifest.xml"
+	sed -i 's/##usercert##/'"${CERTFILE}"'/g' "${ZIPNAME}/MANIFEST/manifest.xml"
+	sed -i 's/##uuid##/'"$(uuid)"'/g' "${ZIPNAME}/MANIFEST/manifest.xml"
 fi
 
-SUFFIX=
-if [ "${ITAK}" == 0 ];
-then
-	zip -r ${ZIPNAME}.zip ${ZIPNAME}
+SUFFIX=""
+if [[ ${ITAK} == 0 ]]; then
+	zip -r "${ZIPNAME}.zip" "${ZIPNAME}"
 else
-	SUFFIX=_iTAK
-	cd ${ZIPNAME}
+	SUFFIX="_iTAK"
+	cd "${ZIPNAME}" || exit
 	mv secure.pref config.pref
-	zip ../${ZIPNAME}${SUFFIX}.zip config.pref *.p12
+	zip "../${ZIPNAME}${SUFFIX}.zip" config.pref *.p12
 	cd ..
 fi
 
-rm -rf ${ZIPNAME}
-
+rm -rf "${ZIPNAME}"
