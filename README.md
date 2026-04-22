@@ -1,47 +1,71 @@
 # takserver-datapackage-builder
+
 Scripts to help build data packages for TAK Server.
 
-# pre-requisite
-The scripts need to use the `uuid` command line tool. You will need to install that using your systems package manager.
+## Prerequisites
 
+The scripts require the `uuid` command-line tool. You can install it using your system's package manager:
+- On Debian/Ubuntu: `sudo apt-get install uuid-runtime`
+- On CentOS/RHEL: `sudo yum install uuid`
 
-# Directions:
-1. Place your servers' CA.p12 into each of the template folders
-2. Update the secure.pref in each tempalte to use your host and to your server's CA.p12
-3. Update the MANIFEST/manifest.xml file in each template to use your servers' CA.p12
+## Directions:
 
-# buildDP.sh
-You can use this script to build a data package when user's certs exist already or you just need a data package for auto-certificate enrollment
+1. Place your servers' CA.p12 file into each of the template folders.
+2. Update the `secure.pref` in each template to use your host and server's CA.p12.
+3. Update the `MANIFEST/manifest.xml` file in each template to reference your server's CA.p12.
 
-`./buildDP.sh -U <username> -z <name for datapackage zip> -c <certificate file> -i -f`
+## Scripts
 
-`-U <username>`: specify the name of the user for this data package.  This is only used to name the zip file and change the display in TAK.  
+### buildDP.sh
 
-`-z <name for data package zip>`: specify the name of the output data package zip file
+You can use this script to build a data package when user certificates exist already or you just need a data package for auto-certificate enrollment.
 
-`-c <certificate file>`: specify the full path to the user's certificate file
+**Usage:**
 
-`-i`: specify if you want an iTAK data package built
+```bash
+./buildDP.sh -U <username> -z <name for datapackage zip> -c <certificate file> [-i] [-f]
+```
 
-`-f`: specify if you want a full ATAK data package built, which will include the user's certificate file.  The default it to build an auto enrollment data package.
+- `-h`: Show this help message and exit.
+- `-U <username>`: Specify the name of the user for this data package. This is used to name the zip file and change the display in TAK.
+- `-z <name for datapackage zip>`: Specify the name of the output data package zip file.
+- `-c <certificate file>`: Specify the full path to the user's certificate file.
+- `-i`: Include iTAK configuration (optional).
+- `-f`: Create a full ATAK data package, which will include the user's certificate file. The default is to build an auto-enrollment data package.
+
+**Example Usage:**
+
+```bash
+./buildDP.sh -U john.doe -z john-doe-package.zip -c /path/to/john.doe-cert.p12 -f
+```
+
+### createUserCert.sh
+
+You can use this script to create a new user and build the corresponding data package simultaneously.
+
+**Usage:**
+
+```bash
+./createUserCert.sh -u <username> -c <name for certificate file> [-i] [-f]
+```
+
+- `-h`: Show this help message and exit.
+- `-u <username>`: Specify the name of the user to be added to the TAK Server.
+- `-c <name for certificate file>`: Specify the name of the new certificate file to be created.
+- `-i`: Include iTAK configuration (optional).
+- `-f`: Create a full ATAK data package, which will include the user's certificate file. The default is to build an auto-enrollment data package.
+
+**Example Usage:**
+
+```bash
+./createUserCert.sh -u jane.doe -c jane-doe-cert -i -f
+```
 
 ### Output
-Will be a working data package zip file for either ATAK or iTAK depending on what was specified
 
-# createUserCert.sh
-You can use this script to create a new user and data package for that user simultaenously.
+- **buildDP.sh**: A working data package zip file for either ATAK or iTAK, depending on the specified flags.
+- **createUserCert.sh**: The new user will be created along with the specified data package.
 
-`./createUserCert.sh -u <username> -c <name for the certificate file> -i -f`
+## Additional Notes
 
-`-u <username>`: specify the name of the user to be added to the TAK Server 
-
-`-c <name of the certificate file>`: specify the name of the new certificate file to be created
-
-`-i`: specify if you want an iTAK data package built
-
-`-f`: specify if you want a full ATAK data package built, which will include the user's certificate file.  The default it to build an auto enrollment data package.
-
-### Output
-The new user will be created along with the specified data package
-
-
+Ensure that the paths and filenames used in the scripts match your environment. Adjust the templates as necessary to reflect your specific setup.
