@@ -69,3 +69,7 @@ You can use this script to create a new user and build the corresponding data pa
 ## Additional Notes
 
 Ensure that the paths and filenames used in the scripts match your environment. Adjust the templates as necessary to reflect your specific setup.
+
+## License
+
+This project is licensed under the MIT License.  See [LICENSE](LICENSE) for more details.
