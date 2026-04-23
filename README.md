@@ -28,7 +28,7 @@ You can use this script to build a data package when user certificates exist alr
 
 - `-h`: Show this help message and exit.
 - `-U <username>`: Specify the name of the user for this data package. This is used to name the zip file and change the display in TAK.
-- `-z <name for datapackage zip>`: Specify the name of the output data package zip file.
+- `-z <name for datapackage zip>`: Specify the base name for the output data package (without `.zip` extension).
 - `-c <certificate file>`: Specify the full path to the user's certificate file.
 - `-i`: Include iTAK configuration (optional).
 - `-f`: Create a full ATAK data package, which will include the user's certificate file. The default is to build an auto-enrollment data package.
@@ -36,7 +36,7 @@ You can use this script to build a data package when user certificates exist alr
 **Example Usage:**
 
 ```bash
-./buildDP.sh -U john.doe -z john-doe-package.zip -c /path/to/john.doe-cert.p12 -f
+./buildDP.sh -U john.doe -z john-doe-package -c /path/to/john.doe-cert.p12 -f
 ```
 
 ### createUserCert.sh

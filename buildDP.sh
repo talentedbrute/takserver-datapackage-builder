@@ -35,7 +35,7 @@ usage() {
     echo "Options:"
     echo "  -h          Show this help message and exit."
     echo "  -U <user>   Specify the username."
-    echo "  -z <name>   Name for the data package zip file."
+    echo "  -z <name>   Base name for the data package (without .zip extension)."
     echo "  -c <cert>   Path to the certificate file."
     echo "  -i          Include iTAK configuration (optional)."
     echo "  -f          Create a full data package (optional)."
