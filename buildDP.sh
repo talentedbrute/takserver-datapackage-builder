@@ -29,6 +29,7 @@ ITAK=0
 FULL=0
 
 usage() {
+    local exit_code=${1:-0}
     echo "Usage: buildDP.sh [options]"
     echo ""
     echo "Options:"
@@ -38,13 +39,13 @@ usage() {
     echo "  -c <cert>   Path to the certificate file."
     echo "  -i          Include iTAK configuration (optional)."
     echo "  -f          Create a full data package (optional)."
-    exit 1
+    exit "$exit_code"
 }
 
 while getopts "fiz:U:c:h" arg; do
 	case $arg in
 		h)
-			usage
+			usage 0
 			;;
 		U)
 			USER=$OPTARG
@@ -66,7 +67,7 @@ done
 shift $((OPTIND-1))
 
 if [[ -z "${ZIPNAME}" || -z "${CERT}" || -z "${USER}" ]]; then
-	usage
+	usage 1
 fi
 
 CERTFILE=$(basename "${CERT}")

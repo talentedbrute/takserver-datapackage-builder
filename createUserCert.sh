@@ -29,6 +29,7 @@ ITAK_FLAG=""
 FULL_FLAG=""
 
 usage() {
+    local exit_code=${1:-0}
     echo "Usage: createUserCert.sh [options]"
     echo ""
     echo "Options:"
@@ -37,13 +38,13 @@ usage() {
     echo "  -c <name>   Name for the certificate file."
     echo "  -i          Include iTAK configuration (optional)."
     echo "  -f          Create a full data package (optional)."
-    exit 1
+    exit "$exit_code"
 }
 
 while getopts "ifu:c:h" arg; do
     case $arg in
         h)
-            usage
+            usage 0
             ;;
         u)
             USER=$OPTARG
@@ -58,14 +59,14 @@ while getopts "ifu:c:h" arg; do
             FULL_FLAG="-f"
             ;;
         *)
-            usage
+            usage 1
             ;;
     esac
 done
 shift $((OPTIND-1))
 
 if [[ -z "${USER}" || -z "${CERTNAME}" ]]; then
-    usage
+    usage 1
 fi
 
 # Change to the certificates directory
